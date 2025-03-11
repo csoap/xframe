@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{954b5a07-06fb-4338-04ec-84493ee77119}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AillieoUtils.UnityDynamicScrollView", "AillieoUtils.UnityDynamicScrollView.csproj", "{91fd25fc-081c-0755-0a93-529ca78a9de1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopScrollRect.Runtime", "LoopScrollRect.Runtime.csproj", "{1c68c207-387f-e7ac-1588-70402de1e9f2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{fa615e22-22ee-5cd0-b80b-aeecbd88f96e}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AillieoUtils.UnityDynamicScrollView.Editor", "AillieoUtils.UnityDynamicScrollView.Editor.csproj", "{8b4d2dec-c3ef-8298-43b6-2a62357ee24e}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopScrollRect.Editor", "LoopScrollRect.Editor.csproj", "{6e587e6f-7eae-d53e-ccbd-79cb53480bbb}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{954b5a07-06fb-4338-04ec-84493ee77119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{954b5a07-06fb-4338-04ec-84493ee77119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91fd25fc-081c-0755-0a93-529ca78a9de1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91fd25fc-081c-0755-0a93-529ca78a9de1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1c68c207-387f-e7ac-1588-70402de1e9f2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1c68c207-387f-e7ac-1588-70402de1e9f2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{fa615e22-22ee-5cd0-b80b-aeecbd88f96e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{fa615e22-22ee-5cd0-b80b-aeecbd88f96e}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8b4d2dec-c3ef-8298-43b6-2a62357ee24e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8b4d2dec-c3ef-8298-43b6-2a62357ee24e}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6e587e6f-7eae-d53e-ccbd-79cb53480bbb}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6e587e6f-7eae-d53e-ccbd-79cb53480bbb}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
