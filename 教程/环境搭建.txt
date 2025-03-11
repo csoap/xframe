@@ -1,0 +1,48 @@
+https://www.bilibili.com/video/BV19d4y1678X
+链接:
+https://blog.csdn.net/linxinfa/article/details/120573016
+https://blog.csdn.net/linxinfa/article/details/120674963
+https://gitcode.net/linxinfa/UnitySprotoDemo?from_codechina=yes
+
+git
+	# 设置全局 git 用户名称和邮箱；
+	git config --global user.name "yourname"
+	git config --global user.email "xxxx@exp.com"
+	ssh-keygen -t rsa -C "xxxx@exp.com"
+
+	cat ~/.ssh/id_rsa.pub
+	将 ~/.ssh/id_rsa.pub 文件中的内容拷贝至 GitHub/Gitee 的 SSH 公钥设置中；
+
+1.virtualbox 
+	安装增强功能开启粘贴板共享
+2.ubuntu 
+	安装,网络桥接
+3.skynet代码编译
+	cd skynet_frame
+	./skynet/skynet etc/config.node1 启动node1
+	./skynet examples/config
+
+4.filezilla 
+	安装openssh-server
+	sudo service sshd restart 重启ssh
+	sudo service sshd status 验证是否开启ssh
+	ifconfig 查看ip
+	22端口
+5.命令行
+	su root 提权root
+6.vscode 插件
+	remote-ssh
+	c/c++
+	lua
+7.mysql
+sudo apt-get install mysql-server
+mysql --version
+service mysql start
+ps -axj |grep mysql 查看是否有mysql进程
+mysql -h127.0.0.1 -uroot -p你的密码 登录mysql
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'your password' WITH GRANT OPTION; 3306
+mysql> flush privileges;
+netstat -an|grep 3306 查看是否开启3306
+
+Remote Exploer : 密码 caizunzao
+虚拟机 root, caizunzao, 密码 caizunzao
