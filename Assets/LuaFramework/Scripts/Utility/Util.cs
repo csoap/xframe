@@ -265,7 +265,7 @@ namespace LuaFramework
         /// </summary>
         public static object[] CallMethod(string module, string func, params object[] args)
         {
-            return LuaManager.GetInstance().CallFunction(module + "." + func, args);
+            return LuaManager.GetInstance().CallFunctionArgs(module + "." + func, args);
         }
 
         public static string ReadFileFromPath(string fileName)

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6507375619082202750}
   - component: {fileID: 2706167431567583994}
   m_Layer: 5
-  m_Name: tips
+  m_Name: TestText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2296,7 +2296,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8178898125416185195}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.7542044
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2564,6 +2564,8 @@ MonoBehaviour:
     obj: {fileID: 8064066043860710197}
   - name: guideMask
     obj: {fileID: 0}
+  - name: test
+    obj: {fileID: 2706167431567583994}
 --- !u!1 &8384778433073756124
 GameObject:
   m_ObjectHideFlags: 0

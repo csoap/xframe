@@ -5,7 +5,7 @@ local this = Main
 
 -- 测试lua配置加载
 local TestLuaCfg = require "Config/TestLuaCfg"
-
+require("Engine.common.init")
 function Main.Init()
     HeartMgr = {}
     log("Lua Main.Init")

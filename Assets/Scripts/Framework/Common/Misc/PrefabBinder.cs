@@ -1,55 +1,57 @@
-﻿
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UObject = UnityEngine.Object;
 
-/// <summary>
-/// 预设物体绑定器
-/// </summary>
 public class PrefabBinder : MonoBehaviour
 {
-
     [Serializable]
-
     public class Item
     {
         public string name;
         public UObject obj;
-
     }
 
-    private Dictionary<string, UObject> _itemDic =new Dictionary<string, UObject>();
-
+    private Dictionary<string, UObject> _itemDic = new Dictionary<string, UObject>();
     public Item[] items = new Item[0];
 
-    private void Awake() {
-        for (int i = 0, cnt = items.Length; i < cnt; i++)
+    private void Awake() 
+    {
+        foreach (var item in items)
         {
-            _itemDic.Add(items[i].name, items[i].obj);
+            // 允许覆盖重复键
+            _itemDic[item.name] = item.obj;
         }
-        items = null;
     }
 
     public UObject GetObj(string name)
     {
-        if (string.IsNullOrEmpty(name)) return null;
-        if(_itemDic.ContainsKey(name))
-            return _itemDic[name];
-        return null;
+        if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogError("PrefabBinder: Name is null or empty.");
+            return null;
+        }
+        _itemDic.TryGetValue(name, out UObject obj);
+        return obj;
     }
 
     public T GetObj<T>(string name) where T : UObject
     {
-        try
+        UObject obj = GetObj(name);
+        if (obj == null)
         {
-            return (T)GetObj(name);
+            Debug.LogError($"PrefabBinder: Object '{name}' not found.");
+            return default;
         }
-        catch (Exception e)
+
+        if (obj is T target)
         {
-            Debug.LogError("PrefabBinder GetObj name = " + name);
-            return default(T);
+            return target;
+        }
+        else
+        {
+            Debug.LogError($"PrefabBinder: Object '{name}' is type {obj.GetType()}, not {typeof(T)}.");
+            return default;
         }
     }
 }

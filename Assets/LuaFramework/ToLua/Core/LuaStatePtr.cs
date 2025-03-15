@@ -1,6 +1,4 @@
-﻿#define LUA_VERSION_5_3
-
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -12,19 +10,89 @@ namespace LuaInterface
     {
         protected IntPtr L;
 
+        string jit = @"            
+        function Euler(x, y, z)
+            x = x * 0.0087266462599716
+            y = y * 0.0087266462599716
+            z = z * 0.0087266462599716
+
+            local sinX = math.sin(x)
+            local cosX = math.cos(x)
+            local sinY = math.sin(y)
+            local cosY = math.cos(y)
+            local sinZ = math.sin(z)
+            local cosZ = math.cos(z)
+
+            local w = cosY * cosX * cosZ + sinY * sinX * sinZ
+            x = cosY* sinX * cosZ + sinY* cosX * sinZ
+            y = sinY * cosX * cosZ - cosY * sinX * sinZ
+            z = cosY* cosX * sinZ - sinY* sinX * cosZ
+
+            return {x = x, y = y, z= z, w = w}
+        end
+
+        function Slerp(q1, q2, t)
+            local x1, y1, z1, w1 = q1.x, q1.y, q1.z, q1.w
+            local x2,y2,z2,w2 = q2.x, q2.y, q2.z, q2.w
+            local dot = x1* x2 + y1* y2 + z1* z2 + w1* w2
+
+            if dot< 0 then
+                dot = -dot
+                x2, y2, z2, w2 = -x2, -y2, -z2, -w2
+            end
+
+            if dot< 0.95 then
+                local sin = math.sin
+                local angle = math.acos(dot)
+                local invSinAngle = 1 / sin(angle)
+                local t1 = sin((1 - t) * angle) * invSinAngle
+                local t2 = sin(t * angle) * invSinAngle
+                return {x = x1* t1 + x2* t2, y = y1 * t1 + y2 * t2, z = z1 * t1 + z2 * t2, w = w1 * t1 + w2 * t2}
+            else
+                x1 = x1 + t* (x2 - x1)
+                y1 = y1 + t* (y2 - y1)                
+                z1 = z1 + t* (z2 - z1)                
+                w1 = w1 + t* (w2 - w1)
+                dot = x1* x1 + y1* y1 + z1* z1 + w1* w1
+
+                return {x = x1 / dot, y = y1 / dot, z = z1 / dot, w = w1 / dot}
+            end
+        end
+
+        if jit then
+    	    if jit.status() then                
+                for i=1,10000 do
+                    local q1 = Euler(i, i, i)
+                    Slerp({ x = 0, y = 0, z = 0, w = 1}, q1, 0.5)
+                end                
+            end	                   
+        end";
+
         public int LuaUpValueIndex(int i)
         {
-#if LUA_VERSION_5_3
-            return LuaDLL.lua_upvalueindex(i);
-#else
-        return LuaIndexes.LUA_GLOBALSINDEX - i;
-#endif
-
+            return LuaIndexes.LUA_GLOBALSINDEX - i;
         }
 
         public IntPtr LuaNewState()
         {
-            return LuaDLL.luaL_newstate();
+            return LuaDLL.luaL_newstate();            
+        }
+
+        public void LuaOpenJit()
+        {
+#if UNITY_ANDROID
+            //某些机型如三星arm64在jit on模式下会崩溃，临时关闭这里
+            if (IntPtr.Size == 8)
+            {
+                LuaDLL.luaL_dostring(L, "jit.off()");                                                
+            }
+            else if (!LuaDLL.luaL_dostring(L, jit))
+            {
+                string str = LuaDLL.lua_tostring(L, -1);
+                LuaDLL.lua_settop(L, 0);
+                throw new Exception(str);
+            }
+#endif
         }
 
         public void LuaClose()
@@ -143,19 +211,10 @@ namespace LuaInterface
             return LuaDLL.lua_tonumber(L, idx);
         }
 
-#if LUA_VERSION_5_3
-        //TODO:暂时先注释（没用到）
-        //public int LuaToInteger(int idx)
-        //{
-        //    return LuaDLL.lua_tointeger(L, idx);
-        //}
-#else
         public int LuaToInteger(int idx)
         {
             return LuaDLL.lua_tointeger(L, idx);
         }
-#endif
-
 
         public bool LuaToBoolean(int idx)
         {
@@ -277,12 +336,10 @@ namespace LuaInterface
             return LuaDLL.lua_getmetatable(L, idx);
         }
 
-#if !LUA_VERSION_5_3
         public void LuaGetEnv(int idx)
         {
             LuaDLL.lua_getfenv(L, idx);
         }
-#endif
 
         public void LuaSetTable(int idx)
         {
@@ -309,12 +366,10 @@ namespace LuaInterface
             LuaDLL.lua_setmetatable(L, objIndex);
         }
 
-#if !LUA_VERSION_5_3
         public void LuaSetEnv(int idx)
         {
             LuaDLL.lua_setfenv(L, idx);
         }
-#endif
 
         public void LuaCall(int nArgs, int nResults)
         {
@@ -341,9 +396,9 @@ namespace LuaInterface
             return LuaDLL.lua_status(L);
         }
 
-        public void LuaGC(LuaGCOptions what, int data = 0)
+        public int LuaGC(LuaGCOptions what, int data = 0)
         {
-            LuaDLL.lua_gc(L, what, data);
+            return LuaDLL.lua_gc(L, what, data);
         }
 
         public bool LuaNext(int index)
@@ -413,15 +468,11 @@ namespace LuaInterface
             return LuaDLL.lua_type(L, n) <= LuaTypes.LUA_TNIL;
         }
 
-#if LUA_VERSION_5_3
-#else
-         public void LuaRawGlobal(string name)
+        public void LuaRawGlobal(string name)
         {
             LuaDLL.lua_pushstring(L, name);
             LuaDLL.lua_rawget(L, LuaIndexes.LUA_GLOBALSINDEX);
-            }
-#endif
-
+        }
 
         public void LuaSetGlobal(string name)
         {
@@ -453,18 +504,10 @@ namespace LuaInterface
             return LuaDLL.luaL_checknumber(L, stackPos);
         }
 
-#if LUA_VERSION_5_3
-        //public int LuaCheckInteger(int idx)
-        //{
-        //    return LuaDLL.luaL_checkinteger(L, idx);
-        //}
-#else
         public int LuaCheckInteger(int idx)
         {
             return LuaDLL.luaL_checkinteger(L, idx);
         }
-#endif
-
 
         public bool LuaCheckBoolean(int stackPos)
         {
@@ -481,19 +524,17 @@ namespace LuaInterface
             return LuaDLL.luaL_loadbuffer(L, buff, size, name);
         }
 
- #if !LUA_VERSION_5_3
         public IntPtr LuaFindTable(int idx, string fname, int szhint = 1)
         {
             return LuaDLL.luaL_findtable(L, idx, fname, szhint);
         }
-#endif
 
         public int LuaTypeError(int stackPos, string tname, string t2 = null)
         {
             return LuaDLL.luaL_typerror(L, stackPos, tname, t2);
         }
 
-        public bool LuaDoString(string chunk, string chunkName = "LuaStatePtr.cs")
+        public bool LuaDoString(string chunk, string chunkName = "@LuaStatePtr.cs")
         {
             byte[] buffer = Encoding.UTF8.GetBytes(chunk);
             int status = LuaDLL.luaL_loadbuffer(L, buffer, buffer.Length, chunkName);
@@ -559,7 +600,7 @@ namespace LuaInterface
         {
             if (LuaException.InstantiateCount > 0 || LuaException.SendMsgCount > 0)
             {
-                LuaDLL.toluaL_exception(L, e);
+                LuaDLL.toluaL_exception(LuaException.L, e);
             }
             else
             {
@@ -590,6 +631,7 @@ namespace LuaInterface
         public void OpenToLuaLibs()
         {
             LuaDLL.tolua_openlibs(L);
+            LuaOpenJit();
         }
 
         public void ToLuaPushTraceback()
@@ -600,6 +642,56 @@ namespace LuaInterface
         public void ToLuaUnRef(int reference)
         {
             LuaDLL.toluaL_unref(L, reference);
+        }
+
+        public int LuaGetStack(int level, ref Lua_Debug ar)
+        {
+            return LuaDLL.lua_getstack(L, level, ref ar);
+        }   
+           
+        public int LuaGetInfo(string what, ref Lua_Debug ar)
+        {
+            return LuaDLL.lua_getinfo(L, what, ref ar);
+        }
+        
+        public string LuaGetLocal(ref Lua_Debug ar, int n)
+        {
+            return LuaDLL.lua_getlocal(L, ref ar, n);
+        }
+        
+        public string LuaSetLocal(ref Lua_Debug ar, int n)
+        {
+            return LuaDLL.lua_setlocal(L, ref ar, n);
+        }
+        
+        public string LuaGetUpvalue(int funcindex, int n)
+        {
+            return LuaDLL.lua_getupvalue(L, funcindex, n);
+        }
+        
+        public string LuaSetUpvalue(int funcindex, int n)
+        {
+            return LuaDLL.lua_setupvalue(L, funcindex, n);
+        }
+        
+        public int LuaSetHook(LuaHookFunc func, int mask, int count)
+        {
+            return LuaDLL.lua_sethook(L, func, mask, count);
+        }
+        
+        public LuaHookFunc LuaGetHook()
+        {
+            return LuaDLL.lua_gethook(L);
+        }
+        
+        public  int LuaGetHookMask()
+        {
+            return LuaDLL.lua_gethookmask(L);
+        }
+        
+        public int LuaGetHookCount()
+        {
+            return LuaDLL.lua_gethookcount(L);
         }
     }
 }

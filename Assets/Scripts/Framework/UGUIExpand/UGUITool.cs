@@ -50,6 +50,7 @@ public class UGUITool
     /// <returns></returns>
     public static InputField SetInputField(PrefabBinder binder, string name, Action<string> onEndEdit)
     {
+        // GameLogger.LogError("SetInputField Error, obj is null: " + name);
         var input = binder.GetObj<InputField>(name);
         if (null == input)
         {

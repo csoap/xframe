@@ -1,0 +1,50 @@
+--
+-- Author: RenGuiYou
+-- Date: 2017-07-09 22:33:00
+--
+
+-- UnityEngine.
+-- MonoBehaviour			= UnityEngine.MonoBehaviour
+-- GameObject				= UnityEngine.GameObject
+-- Transform				= UnityEngine.Transform
+-- Quaternion				= UnityEngine.Quaternion
+-- RectTransform			= UnityEngine.RectTransform
+-- Color					= UnityEngine.Color
+-- Mathf					= UnityEngine.Mathf
+-- Camera					= UnityEngine.Camera
+-- Material				= UnityEngine.Material
+-- Renderer				= UnityEngine.Renderer
+-- Application				= UnityEngine.Application
+-- Time					= UnityEngine.Time
+-- DateTime 				= System.DateTime
+-- AssetBundle				= UnityEngine.AssetBundle
+-- Texture					= UnityEngine.Texture
+-- RenderTexture			= UnityEngine.RenderTexture
+-- -- ParticleSystem			= UnityEngine.ParticleSystem
+-- Sprite					= UnityEngine.Sprite
+-- Animator				= UnityEngine.Animator
+-- PlayerPrefs             = UnityEngine.PlayerPrefs
+-- Input					= UnityEngine.Input
+-- RectTransformUtility	= UnityEngine.RectTransformUtility
+-- Canvas					= UnityEngine.Canvas
+-- CanvasGroup				= UnityEngine.CanvasGroup
+-- Animation               = UnityEngine.Animation
+-- BGFog               = BGFog
+
+-- --UnityEngine.UI
+-- Button					= UnityEngine.UI.Button
+-- Image					= UnityEngine.UI.Image
+-- SDImage					= UnityEngine.UI.SDImage
+-- Text					= UnityEngine.UI.Text
+-- Slider                  = UnityEngine.UI.Slider
+-- InputField              = UnityEngine.UI.InputField
+-- LayoutElement			= UnityEngine.UI.LayoutElement
+-- LayoutGroup				= UnityEngine.UI.LayoutGroup
+-- HorizontalOrVerticalLayoutGroup	 = UnityEngine.UI.HorizontalOrVerticalLayoutGroup
+-- Toggle                  = UnityEngine.UI.Toggle
+-- --Spine.Unity
+-- SkeletonGraphic         =  Spine.Unity.SkeletonGraphic
+
+-- MatrixTweenAlpha        =UITween.MatrixTweenAlpha
+-- MatrixTweenScale        =UITween.MatrixTweenScale
+

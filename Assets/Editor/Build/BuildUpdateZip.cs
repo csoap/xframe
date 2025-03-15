@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
-using Ionic.Zip;
+#endif
+// using Ionic.Zip;
 using System.IO;
 using LitJson;
 using UObject = UnityEngine.Object;
 using System.Text.RegularExpressions;
+using Unity.VisualScripting.IonicZip;
 
 public class BuildUpdateZip : EditorWindow
 {

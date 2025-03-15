@@ -29,7 +29,9 @@ namespace LuaFramework
 
         private LuaManager()
         {
+            
             lua = new LuaState();
+            
 #if LUA_VERSION_5_3
 
 #else
@@ -42,6 +44,7 @@ namespace LuaFramework
 
             LuaBinder.Bind(lua);
             OpenBindLib();
+            DelegateFactory.Init(); //todo 就是这个导致lua到C#action绑定不到
         }
 
 
@@ -108,15 +111,16 @@ namespace LuaFramework
         /// </summary>
         void OpenLibs()
         {
-            lua.OpenLibs(LuaDLL.luaopen_pb);
-            lua.OpenLibs(LuaDLL.luaopen_sproto_core);
-            lua.OpenLibs(LuaDLL.luaopen_protobuf_c);
-            lua.OpenLibs(LuaDLL.luaopen_lpeg);
-#if LUA_VERSION_5_3
-            lua.OpenLibs(LuaDLL.luaopen_bit32);
-#else
+            lua.OpenLibs(LuaDLL.luaopen_pb); // lua-protobuf
+            lua.OpenLibs(LuaDLL.luaopen_sproto_core); // sproto库
+            lua.OpenLibs(LuaDLL.luaopen_protobuf_c); // pbc库
+            lua.OpenLibs(LuaDLL.luaopen_lpeg); // lpeg库
+// #if LUA_VERSION_5_3
+//             lua.OpenLibs(LuaDLL.luaopen_bit32);
+// #else
+//             lua.OpenLibs(LuaDLL.luaopen_bit);
+// #endif
             lua.OpenLibs(LuaDLL.luaopen_bit);
-#endif
 
             lua.OpenLibs(LuaDLL.luaopen_socket_core);
 
@@ -146,18 +150,29 @@ namespace LuaFramework
             return lua.CheckLuaTable(stackPos);
         }
 
-        public object[] DoFile(string filename)
-        {
-            return lua.DoFile(filename);
-        }
+        // public object[] DoFile(string filename)
+        // {
+        //     return lua.DoFile(filename);
+        // }
 
         // Update is called once per frame
-        public object[] CallFunction(string funcName, params object[] args)
+        public void CallFunction(string funcName)
         {
             LuaFunction func = lua.GetFunction(funcName);
             if (func != null)
             {
-                return func.Call(args);
+                func.Call();
+            }
+        }
+        
+        public object[] CallFunctionArgs(string funcName, params object[] args)
+        {
+            LuaFunction func = lua.GetFunction(funcName);
+            if (func != null)
+            {
+                // return func.LazyCall(args);
+                object[] results = func.CallResult(args); // 直接传递参数并获取结果
+                return results;
             }
             return null;
         }
@@ -172,10 +187,10 @@ namespace LuaFramework
             return lua.GetFunction(funcName, beLogMiss);
         }
 
-        public string GetLuaFunDebugStr()
-        {
-            return lua.GetLuaFunDebugStr();
-        }
+        // public string GetLuaFunDebugStr()
+        // {
+        //     return lua.GetLuaFunDebugStr();
+        // }
 
 
         public void LuaGC()
@@ -223,6 +238,11 @@ public class LuaCall
 {
     public static object[] CallFunc(string funcName, params object[] args)
     {
-        return LuaFramework.LuaManager.instance.CallFunction(funcName, args);
+        return LuaFramework.LuaManager.instance.CallFunctionArgs(funcName, args);
+    }
+
+    public static void CallFunc(string funcName)
+    {
+        LuaFramework.LuaManager.instance.CallFunction(funcName);
     }
 }

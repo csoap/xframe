@@ -140,7 +140,7 @@ function Mathf.MoveTowards(current, target, maxDelta)
 		return target
 	end
 
-	return current + mathf.sign(target - current) * maxDelta
+	return current + Mathf.Sign(target - current) * maxDelta
 end
 
 function Mathf.MoveTowardsAngle(current, target, maxDelta)
@@ -194,7 +194,7 @@ function Mathf.SmoothDamp(current, target, currentVelocity, smoothTime, maxSpeed
         currentVelocity = (num8 - num5) / deltaTime		
     end
 	
-    return num8
+    return num8,currentVelocity
 end
 
 function Mathf.SmoothDampAngle(current, target, currentVelocity, smoothTime, maxSpeed, deltaTime)

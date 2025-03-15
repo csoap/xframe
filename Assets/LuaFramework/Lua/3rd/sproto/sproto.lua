@@ -231,7 +231,7 @@ function sproto:findproto(pname)
     return queryproto(self, pname)
 end
 
---已经unpack过的消息处理
+--锟窖撅拷unpack锟斤拷锟斤拷锟斤拷息锟斤拷锟斤拷
 function host:dispatch_nopacked(...)
 	--local bin = core.unpack(...)
     local bin, length, protoname = ...
@@ -280,7 +280,7 @@ function host:dispatch_nopacked(...)
 	end
 end
 
---生成发送 encode然后 pack
+--锟斤拷锟缴凤拷锟斤拷 encode然锟斤拷 pack
  function host:gen_request(request, type, session, tbl)
 	header_tmp.type = type
 	header_tmp.session = session

@@ -14,11 +14,11 @@ public class CallLuaBehaviour : MonoBehaviour
     {
         if (pamamList != null && pamamList.Length > 0)
         {
-            LuaCall.CallFunc(luaFunName, gameObject, pamamList);
+            // LuaCall.CallFunc(luaFunName, gameObject, pamamList);
         }
         else
         {
-            LuaCall.CallFunc(luaFunName, gameObject);
+            // LuaCall.CallFunc(luaFunName, gameObject);
         }
     }
 

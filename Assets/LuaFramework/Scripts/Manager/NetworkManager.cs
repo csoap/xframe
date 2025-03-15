@@ -126,6 +126,7 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public object[] CallMethod(string func, params object[] args)
         {
+            GameLogger.Log(func + 111111);
             return LuaCall.CallFunc(ManagerName.Network + "." + func, args);
         }
 
@@ -133,6 +134,7 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public void OnNetStateChanged(NetState state, object param = null)
         {
+            GameLogger.Log(param);
             CallMethod("OnNetStateChanged", (int)state, param);
         }
 
@@ -164,7 +166,7 @@ namespace LuaFramework
                     {
                         //OnRequestDataFun.Call(spStream.Buffer);
 
-                        object[] objs = OnRequestDataFun.Call(spStream, spStream.Length);
+                        object[] objs = OnRequestDataFun.CallResult(spStream, spStream.Length);
                         if (objs != null && objs.Length >= 1)
                         {
                             return (bool)objs[0];
@@ -200,7 +202,7 @@ namespace LuaFramework
                         GameLogger.LogError("NetworkManager OnResponseData protocol is nil session not exist " + session);
                     }
 
-                    object[] objs = OnResponseDataFun.Call(spStream, spStream.Length, protoName);
+                    object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
                     if (objs != null && objs.Length >= 1)
                     {
                         bRet = (bool)objs[0];
@@ -226,7 +228,7 @@ namespace LuaFramework
                             GameLogger.LogError("NetworkManager OnResponseData session not exist " + session + " tag = " + protocol.Tag);
                         }
 
-                        object[] objs = OnResponseDataFun.Call(spStream, spStream.Length, protoName);
+                        object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
                         if (objs != null && objs.Length >= 1)
                         {
                             bRet = (bool)objs[0];
@@ -248,7 +250,7 @@ namespace LuaFramework
         /// <param name="session"></param>
         /// <param name="tag"></param>
         /// <param name="data"></param>
-        [ExportToLuaAttribute]
+        // [ExportToLuaAttribute]
         public static void SendData(string proto, int session, int tag, LuaByteBuffer data)
         {
             ClientNet.instance.Send(proto, data.buffer, data.buffer.Length, session, tag);

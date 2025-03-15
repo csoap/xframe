@@ -62,6 +62,7 @@ public class ClientNet : MonoBehaviour
 
     public void AddNetStateListener(INetStateListener listener)
     {
+        GameLogger.Log("czz addlisten");
         m_connection.AddNetStateListener(listener);
     }
 

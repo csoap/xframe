@@ -55,17 +55,17 @@ namespace LuaFramework
 
         public void UpdateEx()
         {
-            LuaLooper.GetInstance().UpdateEx();
+            // LuaLooper.GetInstance().Update();
         }
 
         public void LateUpdateEx()
         {
-            LuaLooper.GetInstance().LateUpdateEx();
+            // LuaLooper.GetInstance().LateUpdate();
         }
 
         public void FixedUpdateEx()
         {
-            LuaLooper.GetInstance().FixedUpdateEx();
+            // LuaLooper.GetInstance().FixedUpdate();
         }
 
         public void Close()
