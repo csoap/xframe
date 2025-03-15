@@ -49,7 +49,8 @@ namespace LuaInterface
         }
 
         //beZip = false 在search path 中查找读取lua文件。否则从外部设置过来bundel文件中读取lua文件
-        public bool beZip = false;
+        // 编辑器环境设为false, 打包模式设为true
+        public bool beZip = true;
         protected List<string> searchPaths = new List<string>();
         protected Dictionary<string, AssetBundle> zipMap = new Dictionary<string, AssetBundle>();
 
@@ -68,6 +69,7 @@ namespace LuaInterface
 
         public void Init()
         {
+            GameLogger.LogCZZ("beZip" + beZip);
             if (beZip)
             {
                 //update (只有在更新时候用到)
@@ -198,7 +200,8 @@ namespace LuaInterface
             }
             else
             {
-                return ReadZipFile(fileName);
+                // return ReadZipFile(fileName);
+                return ReadBytesFromAssetBundle(fileName);
             }
         }
 
@@ -385,6 +388,42 @@ namespace LuaInterface
             }
             return null;
 
+        }
+        
+        private byte[] ReadBytesFromAssetBundle(string fileName)
+        {
+            //使用全名， 避免冲突
+            fileName = "Assets/luabundle/" + fileName;
+
+            string bundleFileName = fileName + ".bytes";
+            int bundleCount = m_luaBundleList.Count;
+            for (int i = 0; i < bundleCount; i++)
+            {
+                AssetBundle ab = m_luaBundleList[i];
+                TextAsset luaCode = ab.LoadAsset<TextAsset>(bundleFileName);
+                if (luaCode == null)
+                {
+                    //require过来的 没有包含.lua后缀
+                    string extendStr = Path.GetExtension(fileName);
+                    if (string.IsNullOrEmpty(extendStr))
+                    {
+                        bundleFileName = fileName + ".lua.bytes";
+                        luaCode = ab.LoadAsset<TextAsset>(bundleFileName);
+                    }
+                }
+
+                byte[] luaBytes = null;
+                if (luaCode != null)
+                {
+                    // 解密
+                    luaBytes =  AESEncrypt.Decrypt(luaCode.bytes);
+                    Resources.UnloadAsset(luaCode);
+                    return luaBytes;
+                }
+            }
+
+            GameLogger.LogError("LuaFileUtils.ReadBytesFromAssetBundle " + fileName);
+            return null;
         }
 
         

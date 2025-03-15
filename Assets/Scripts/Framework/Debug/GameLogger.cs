@@ -95,6 +95,12 @@ public class GameLogger
         if (!s_debugLogEnable) return;
         Debug.Log(message, context);
     }
+    
+    public static void LogCZZ(object message, Object context = null)
+    {
+        if (!s_debugLogEnable) return;
+        Debug.Log("czz :" + message, context);
+    }
 
     /// <summary>
     /// 格式化打印日志

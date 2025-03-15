@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using LuaInterface;
-using UnityEngine;
 
 public class DelegateFactory
 {
@@ -12,7 +11,6 @@ public class DelegateFactory
 
 	public static void Init()
 	{
-		Debug.Log("czz init");
 		Register();
 	}
 
@@ -159,7 +157,7 @@ public class DelegateFactory
     public static Delegate CreateDelegate(Type t, LuaFunction func = null)
     {
         DelegateCreate Create = null;
-		Debug.Log("czz 22222222");
+
         if (!dict.TryGetValue(t, out Create))
         {
             throw new LuaException(string.Format("Delegate {0} not register", LuaMisc.GetTypeName(t)));            

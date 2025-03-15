@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using LuaInterface;
+using UnityEngine;
 
 
 namespace LuaFramework
@@ -98,8 +99,9 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public void OnInit()
         {
-            CallMethod("OnInit");
-
+            // CallMethod("OnInit");
+            LuaCall.CallFunc("OnInit");
+            
             OnRequestDataFun = Util.GetLuaFunc("Network", "OnRequestDataFun");
 
             OnResponseDataFun = Util.GetLuaFunc("Network", "OnResponseDataFun");
@@ -126,8 +128,11 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public object[] CallMethod(string func, params object[] args)
         {
-            GameLogger.Log(func + 111111);
-            return LuaCall.CallFunc(ManagerName.Network + "." + func, args);
+            Debug.Log(ManagerName.Network + "." + func + "_" + args.Length);
+            object[] objects = LuaCall.CallFunc(ManagerName.Network + "." + func, args);
+            // object[] objects = LuaCall.CallFunc(ManagerName.Network + "." + func, args);
+            // object[] objects = LuaFramework.LuaManager.instance.CallFunctionArgs<object[]>(ManagerName.Network + "." + func, args[0]);
+            return objects;
         }
 
         ///---------------------------------接入本地的网络处理---------------------------------------------------
@@ -166,7 +171,7 @@ namespace LuaFramework
                     {
                         //OnRequestDataFun.Call(spStream.Buffer);
 
-                        object[] objs = OnRequestDataFun.CallResult(spStream, spStream.Length);
+                        object[] objs = OnRequestDataFun.Invoke<SpStream, int, object[]>(spStream, spStream.Length);
                         if (objs != null && objs.Length >= 1)
                         {
                             return (bool)objs[0];
@@ -202,7 +207,8 @@ namespace LuaFramework
                         GameLogger.LogError("NetworkManager OnResponseData protocol is nil session not exist " + session);
                     }
 
-                    object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
+                    // object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
+                    object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
                     if (objs != null && objs.Length >= 1)
                     {
                         bRet = (bool)objs[0];
@@ -228,7 +234,8 @@ namespace LuaFramework
                             GameLogger.LogError("NetworkManager OnResponseData session not exist " + session + " tag = " + protocol.Tag);
                         }
 
-                        object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
+                        // object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
+                        object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
                         if (objs != null && objs.Length >= 1)
                         {
                             bRet = (bool)objs[0];

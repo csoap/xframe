@@ -29,7 +29,6 @@ public class LuaFramework_UtilWrap
 		L.RegFunction("GetLuaFunc", GetLuaFunc);
 		L.RegFunction("GetFunction", GetFunction);
 		L.RegFunction("LoadPrefab", LoadPrefab);
-		L.RegFunction("CallMethod", CallMethod);
 		L.RegFunction("ReadFileFromPath", ReadFileFromPath);
 		L.RegFunction("CheckEnvironment", CheckEnvironment);
 		L.RegFunction("ReadXMLConfigFile", ReadXMLConfigFile);
@@ -476,25 +475,6 @@ public class LuaFramework_UtilWrap
 			string arg0 = ToLua.CheckString(L, 1);
 			UnityEngine.GameObject o = LuaFramework.Util.LoadPrefab(arg0);
 			ToLua.PushSealed(L, o);
-			return 1;
-		}
-		catch (Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CallMethod(IntPtr L)
-	{
-		try
-		{
-			int count = LuaDLL.lua_gettop(L);
-			string arg0 = ToLua.CheckString(L, 1);
-			string arg1 = ToLua.CheckString(L, 2);
-			object[] arg2 = ToLua.ToParamsObject(L, 3, count - 2);
-			object[] o = LuaFramework.Util.CallMethod(arg0, arg1, arg2);
-			ToLua.Push(L, o);
 			return 1;
 		}
 		catch (Exception e)

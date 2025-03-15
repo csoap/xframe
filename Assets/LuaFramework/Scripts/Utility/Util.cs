@@ -263,10 +263,10 @@ namespace LuaFramework
         /// <summary>
         /// 执行Lua方法
         /// </summary>
-        public static object[] CallMethod(string module, string func, params object[] args)
-        {
-            return LuaManager.GetInstance().CallFunctionArgs(module + "." + func, args);
-        }
+        // public static object[] CallMethod(string module, string func, params object[] args)
+        // {
+        //     return LuaManager.GetInstance().CallFunctionArgs(module + "." + func, args);
+        // }
 
         public static string ReadFileFromPath(string fileName)
         {

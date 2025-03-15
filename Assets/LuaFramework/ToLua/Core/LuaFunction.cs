@@ -115,27 +115,27 @@ namespace LuaInterface
         }
 
         //慎用
-        // public object[] CallArgs(params object[] args)
-        // {
-        //     BeginPCall();
-        //     int count = args == null ? 0 : args.Length;
-        //
-        //     if (!luaState.LuaCheckStack(count + 6))
-        //     {
-        //         EndPCall();
-        //         throw new LuaException("stack overflow");
-        //     }
-        //     // 推送所有参数
-        //     foreach (object arg in args)
-        //     {
-        //         PushGeneric(arg);        // 使用通用类型推送方法
-        //     }
-        //
-        //     PCall();
-        //     object[] objs = luaState.CheckObjects(oldTop);
-        //     EndPCall();
-        //     return objs;
-        // }
+        public object[] CallArgs(params object[] args)
+        {
+            BeginPCall();
+            int count = args == null ? 0 : args.Length;
+        
+            if (!luaState.LuaCheckStack(count + 6))
+            {
+                EndPCall();
+                throw new LuaException("stack overflow");
+            }
+            // 推送所有参数
+            foreach (object arg in args)
+            {
+                PushGeneric(arg);        // 使用通用类型推送方法
+            }
+        
+            PCall();
+            object[] objs = luaState.CheckObjects(oldTop);
+            EndPCall();
+            return objs;
+        }
         
         
         
@@ -154,15 +154,15 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1>(T1 arg1)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1>(T1 arg1)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
         
 
         public void Call<T1, T2>(T1 arg1, T2 arg2)
@@ -174,16 +174,16 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2>(T1 arg1, T2 arg2)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2>(T1 arg1, T2 arg2)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
         
         
         public void Call<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
@@ -196,17 +196,17 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3>(T1 arg1, T2 arg2, T3 arg3)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
 
         public void Call<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
         {
@@ -219,18 +219,18 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PushGeneric(arg4);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3, T4>(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PushGeneric(arg4);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
 
         public void Call<T1, T2, T3, T4, T5>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
         {
@@ -244,19 +244,19 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3, T4, T5>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PushGeneric(arg4);
-            PushGeneric(arg5);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3, T4, T5>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PushGeneric(arg4);
+        //     PushGeneric(arg5);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
 
         public void Call<T1, T2, T3, T4, T5, T6>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
         {
@@ -271,20 +271,20 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3, T4, T5, T6>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PushGeneric(arg4);
-            PushGeneric(arg5);
-            PushGeneric(arg6);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3, T4, T5, T6>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PushGeneric(arg4);
+        //     PushGeneric(arg5);
+        //     PushGeneric(arg6);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
         
 
         public void Call<T1, T2, T3, T4, T5, T6, T7>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
@@ -301,21 +301,21 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3, T4, T5, T6, T7>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PushGeneric(arg4);
-            PushGeneric(arg5);
-            PushGeneric(arg6);
-            PushGeneric(arg7);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3, T4, T5, T6, T7>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PushGeneric(arg4);
+        //     PushGeneric(arg5);
+        //     PushGeneric(arg6);
+        //     PushGeneric(arg7);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
 
         public void Call<T1, T2, T3, T4, T5, T6, T7, T8>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
         {
@@ -332,22 +332,22 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3, T4, T5, T6, T7, T8>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PushGeneric(arg4);
-            PushGeneric(arg5);
-            PushGeneric(arg6);
-            PushGeneric(arg7);
-            PushGeneric(arg8);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3, T4, T5, T6, T7, T8>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PushGeneric(arg4);
+        //     PushGeneric(arg5);
+        //     PushGeneric(arg6);
+        //     PushGeneric(arg7);
+        //     PushGeneric(arg8);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
 
         public void Call<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
         {
@@ -365,23 +365,23 @@ namespace LuaInterface
             EndPCall();
         }
         
-        public object[] CallResult<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
-        {
-            BeginPCall();
-            PushGeneric(arg1);
-            PushGeneric(arg2);
-            PushGeneric(arg3);
-            PushGeneric(arg4);
-            PushGeneric(arg5);
-            PushGeneric(arg6);
-            PushGeneric(arg7);
-            PushGeneric(arg8);
-            PushGeneric(arg9);
-            PCall();
-            object[] objs = luaState.CheckObjects(oldTop);
-            EndPCall();
-            return objs;
-        }
+        // public object[] CallResult<T1, T2, T3, T4, T5, T6, T7, T8, T9>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+        // {
+        //     BeginPCall();
+        //     PushGeneric(arg1);
+        //     PushGeneric(arg2);
+        //     PushGeneric(arg3);
+        //     PushGeneric(arg4);
+        //     PushGeneric(arg5);
+        //     PushGeneric(arg6);
+        //     PushGeneric(arg7);
+        //     PushGeneric(arg8);
+        //     PushGeneric(arg9);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
         
 
         public R1 Invoke<R1>()
