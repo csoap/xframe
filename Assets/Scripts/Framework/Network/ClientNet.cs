@@ -23,6 +23,7 @@ public class ClientNet : MonoBehaviour
 
     public void Init()
     {
+        GameLogger.LogCZZ("ClientNet Init");
         m_connection.Initialize(s2c.sproto, c2s.sproto, "package", new ProtocolProcessor().onRecvData, true);
     }
 
@@ -47,6 +48,7 @@ public class ClientNet : MonoBehaviour
     /// </summary>
     public void Send(string proto, byte[] data, int length, int session, int tag)
     {
+        GameLogger.LogCZZ("send :" + proto);
         m_connection.Send(proto, data, length, session, tag);
     }
 
@@ -62,7 +64,6 @@ public class ClientNet : MonoBehaviour
 
     public void AddNetStateListener(INetStateListener listener)
     {
-        GameLogger.Log("czz addlisten");
         m_connection.AddNetStateListener(listener);
     }
 

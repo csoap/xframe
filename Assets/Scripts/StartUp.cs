@@ -49,6 +49,9 @@ public class StartUp : MonoBehaviour
         // 日志
         GameLogger.Init();
         LogCat.Init();
+        
+        ClientNet.instance.Init();
+        
         // 网络消息注册
         m_networkMsgEventRegister.RegistNetworkMsgEvent();
         // 界面管理器
@@ -63,7 +66,7 @@ public class StartUp : MonoBehaviour
 
 
         TimerThread.instance.Init();
-        ClientNet.instance.Init();
+        // ClientNet.instance.Init();
         ScreenCapture.Init();
     }
 

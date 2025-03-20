@@ -181,6 +181,7 @@ public class SpRpc
                 return null;
             }
             // handle request
+            GameLogger.Log("czz type: " + type);
             SpProtocol protocol = mHostTypeManager.GetProtocolByTag(type);
             if (protocol == null)
             {

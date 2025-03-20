@@ -28,13 +28,9 @@ function LoginPanel:SetUi(binder)
     -- 密码输入框
     local cachePwdMd5 = Cache.Get("PASSWORD", "")
     local finalPwdMd5 = cachePwdMd5
-    
-    --DelegateTest.TestAction(function (s)
-    --    print("Lua received:", s) -- 预期输出 "Hello from C#"
-    --end)
-    
-     local pwdInput = UGUITool.SetInputField(binder, "pwdInput", function (v)
-         logGreen("pwd :" .. v)
+
+    local pwdInput = UGUITool.SetInputField(binder, "pwdInput", function (v)
+        --  logGreen("pwd :" .. v)
          -- 输入框编辑完毕后会进入这个回调
          if "********" == v then
              return
@@ -43,8 +39,8 @@ function LoginPanel:SetUi(binder)
          if newPwdMd5 ~= cachePwdMd5 then
              finalPwdMd5 = newPwdMd5
          end
-     end)
-     UGUITool.SetText(binder, "test", "12312312312")
+    end)
+    --  UGUITool.SetText(binder, "test", "12312312312")
 
      -- 当缓存了密码，修改任何字符都会清掉密码
      pwdInput.onValueChanged:AddListener(function (v)
@@ -67,7 +63,7 @@ function LoginPanel:SetUi(binder)
          if not LoginLogic.CheckPwd(pwdInput.text) then
              return
          end
-
+        --  Main.Send()
          -- 执行登录
          local account = accountInput.text
          -- logGreen("pwd :" .. pwdInput.text .. ", md5: " .. Util.md5(pwdInput.text))

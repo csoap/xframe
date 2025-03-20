@@ -238,6 +238,8 @@ function host:dispatch_nopacked(...)
     --log("length-----"..length)
 	header_tmp.type = nil
 	header_tmp.session = nil
+	
+	
 	local header, size = core.decode(self.__package, bin, length, header_tmp)
 	local content = bin:sub(size + 1)
 	if header.type then

@@ -38,7 +38,7 @@ get_update_info 1 {
 }
 
 #心跳
-heartbeat 2 {
+heartbeat 99 {
 	
 }
 

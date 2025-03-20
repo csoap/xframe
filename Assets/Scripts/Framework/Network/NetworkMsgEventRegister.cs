@@ -14,5 +14,13 @@ public class NetworkMsgEventRegister
         //{
         //    //ProtocolProcessor.AddCallback(SpRpcOp.Request, "user_info", OnUserInfo);
         //}
+        ProtocolProcessor.AddCallback(SpRpcOp.Request, "heartbeat", OnHeartBeat);
+
+    }
+    
+    private void OnHeartBeat(string protoName, SpObject data)
+    {
+        // TODO
+        GameLogger.LogCZZ("OnHeartBeat");
     }
 }

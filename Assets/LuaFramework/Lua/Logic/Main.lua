@@ -6,8 +6,9 @@ local this = Main
 -- 测试lua配置加载
 local TestLuaCfg = require "Config/TestLuaCfg"
 require("Engine.common.init")
+require("Network.HeartMgr")
 function Main.Init()
-    HeartMgr = {}
+    -- HeartMgr = {}
     log("Lua Main.Init")
     -- 红点系统
     RedpointTree.Init()
@@ -26,12 +27,12 @@ function Main.Start()
     LoginPanel.Show()
 end
 
--- function Main.Send()
---     -- 客户端发送协议给服务端：Lua层
---     Network.SendData("sayhello", { what = "hi, i am unity from lua" }, function(data)
---             log("on response: " .. data.error_code .. " " .. data.msg)
---         end
---     )
--- end
+function Main.Send()
+    -- 客户端发送协议给服务端：Lua层
+    Network.SendData("sayhello", { what = "hi, i am unity from lua" }, function(data)
+            log("on response: " .. data.error_code .. " " .. data.msg)
+        end
+    )
+end
 
 -- endregion

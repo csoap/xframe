@@ -1,5 +1,5 @@
 -- 调用 LuaFramework.NetworkManager.AddLuaProcessS2C(tag, flag) 增加lua 的网络回调处理
--- tag:proto定义的标记 | flag 0:只C#层处理(不需要添加)，2:lua C#共同处理 3:只lua 处理
+-- tag:proto定义的标记 | flag 0:只C#层处理(不需要添加)，1:lua C#共同处理 3:只lua 处理
 -- (如果需要改变方法名称可以在初始化的时候调用LuaFramework.NetworkManager.SetOnRequestDataFun / SetOnResponseDataFun)
 -- 对于某些不同模式之间公用的处理，可以调用动态添加的方法，在进入Mode的时候AddLuaProcessC2S 退出的时候 RemoveLuaProcessC2S
 
@@ -66,6 +66,7 @@ function Network.OnInit()
     -- 初始化sproto文件
     local c2s = Util.ReadFileFromPath("proto/c2s.sproto")
     if c2s ~= nil then
+        log("Network.c2s init!!")
         c2s_proto = sproto.parse(c2s)
         c2s_host = c2s_proto:host "package"
     else
@@ -154,6 +155,8 @@ end
 
 -- 收到服务器请求处理
 function Network.OnRequestDataFun(buffer, length)
+    log('OnRequestDataFun buffer' .. type(buffer))
+    log('OnRequestDataFun length' .. type(length) .." " .. length)
     local type, protoname, request = s2c_host:dispatch_nopacked(buffer, length)
 
     local protoProcessTab = s2cProcessTab[protoname]
@@ -179,11 +182,14 @@ end
 
 -- 收到服务器响应处理
 function Network.OnResponseDataFun(buffer, length, protoname)
+    logCZZ('OnResponseDataFun buffer' .. type(buffer))
+    logCZZ('OnResponseDataFun length' .. type(length) .." " .. length)
+    logCZZ('OnResponseDataFun protoname' .. type(protoname) .. " " .. protoname)
     if protoname == nil then
         logWarn("Network.OnResponseDataFun protoname is nil ....")
         return true
     end
-
+    
     local type, session, response = c2s_host:dispatch_nopacked(buffer, length, protoname)
 
     this.req_cache_tab[session] = nil
@@ -219,7 +225,7 @@ end
 
 -- lua发送消息接口， protoname:协议名称, prototab:协议内容 lua table
 function Network.SendData(protoname, prototab, handler)
-    logGreen("Network.SendData " .. protoname)
+    --logGreen("Network.SendData " .. protoname)
     if prototab then
         LuaUtil.PrintTable(prototab)
     end
@@ -230,6 +236,7 @@ function Network.SendData(protoname, prototab, handler)
         end
         local session = networkMgr.GetNextSession()
         local v = c2s_host:gen_request(p.request, p.tag, session, prototab)
+        --logGreen("czz " + p.request+"_" + p.tag +"_" + session)
         if v ~= nil then
             networkMgr.SendData(protoname, session, p.tag, v)
             -- 加入缓存
@@ -239,6 +246,7 @@ function Network.SendData(protoname, prototab, handler)
             if handler then
                 this.sessionHandlers[session] = handler
             end
+            LuaUtil.PrintTable(this.req_cache_tab[session])
         else
             logError("Network.SendData v is nil tag = " .. p.tag .. " protoname = " .. protoname)
         end
@@ -268,8 +276,6 @@ function Network.ResendCacheDataOnReconnect()
         LuaUtil.FireEvent(EventNameDef.LUA_NETWORK_RESEND_SUCCESSFULLY)
     end
 end
-
-
 
 -- 仅部分公用的网络消息需要动态的添加 和 删除(某些不同的模式公用)
 function Network.AddLuaProcessC2S(protoname, flag, processFun)

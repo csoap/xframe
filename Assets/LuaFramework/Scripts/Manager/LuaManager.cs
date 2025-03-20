@@ -3,6 +3,8 @@
 using UnityEngine;
 using LuaInterface;
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace LuaFramework
 {
@@ -165,6 +167,96 @@ namespace LuaFramework
             }
         }
         
+        // public object[] CallFunction(string funcName, params object[] args)
+        // {
+        //     LuaFunction func = lua.GetFunction(funcName);
+        //     if (func != null)
+        //     {
+        //         GameLogger.Log("czz args" + args.Length);
+        //
+        //         if (args != null && args.Length > 0)
+        //         {
+        //             
+        //         }
+        //         else
+        //         {
+        //             return func.Invoke<object[]>();
+        //         }
+        //         
+        //         return null;
+        //     }
+        //     GameLogger.Log("function nil" + funcName);
+        //     return null;
+        // }
+        
+        public object[] CallFunction(string funcName, params object[] args)
+        {
+            LuaFunction func = lua.GetFunction(funcName);
+            GameLogger.LogCZZ("funcName :" + funcName);
+            if (func != null)
+            {
+                return func.CallArgs(args);
+            }
+            return null;
+        }
+        
+        // public object[] CallFunction(string funcName, params object[] args)
+        // {
+        //     LuaFunction func = lua.GetFunction(funcName);
+        //     if (func == null)
+        //     {
+        //         GameLogger.LogError($"Lua函数不存在: {funcName}");
+        //         return null;
+        //     }
+        //
+        //     try
+        //     {
+        //         // 1. 处理 null 和空参数
+        //         // 1. 过滤 null 值并生成新数组
+        //         List<object> validArgs = new List<object>();
+        //         if (args != null)
+        //         {
+        //             foreach (object arg in args)
+        //             {
+        //                 if (arg != null) // 过滤掉 null
+        //                 {
+        //                     validArgs.Add(arg);
+        //                 }
+        //             }
+        //         }
+        //         object[] filteredArgs = validArgs.ToArray();
+        //         GameLogger.Log($"调用 {funcName}，参数数量: {args.Length}");
+        //
+        //         // 2. 根据参数数量动态调用
+        //         switch (filteredArgs.Length)
+        //         {
+        //             case 0:
+        //                 return func.Invoke<object[]>();
+        //             case 1:
+        //                 return func.Invoke<object, object[]>(filteredArgs[0]);
+        //             case 2:
+        //                 return func.Invoke<object, object, object[]>(filteredArgs[0], filteredArgs[1]);
+        //             case 3:
+        //                 return func.Invoke<object, object, object, object[]>(filteredArgs[0], filteredArgs[1], filteredArgs[2]);
+        //             // 扩展更多参数...
+        //             default:
+        //                 // 通用方案：反射调用任意数量参数（需性能优化）
+        //                 return null;//InvokeWithReflection(func, args);
+        //         }
+        //     }
+        //     catch (LuaException ex)
+        //     {
+        //         GameLogger.LogError($"Lua调用失败: {funcName}，错误: {ex.Message}");
+        //         return null;
+        //     }
+        //     finally
+        //     {
+        //         func.Dispose();
+        //     }
+        // }
+        //
+        //
+        
         public void CallFunction(string funcName, GameObject go)
         {
             LuaFunction func = lua.GetFunction(funcName);
@@ -217,29 +309,7 @@ namespace LuaFramework
             }
             return default(T);
         }
-        
-        public object[] InvokeFunction(string funcName)
-        {
-            LuaFunction func = lua.GetFunction(funcName);
-            if (func != null)
-            {
-                object[] results = func.Invoke<string, object[]>(funcName); // 直接传递参数并获取结果
-                return results;
-            }
-            return null;
-        }
-        
-        public object[] InvokeFunction(string funcName, GameObject go)
-        {
-            LuaFunction func = lua.GetFunction(funcName);
-            if (func != null)
-            {
-                object[] results = func.Invoke<string, GameObject, object[]>(funcName, go); // 直接传递参数并获取结果
-                return results;
-            }
-            return null;
-        }
-        
+
 
         public LuaFunction GetLuaFunc(string funcName)
         {
@@ -302,22 +372,7 @@ public class LuaCall
 {
     public static object[] CallFunc(string funcName, params object[] args)
     {
-        switch (args.Length)
-        {
-            case 0:
-                // return func.Invoke<object[]>();
-                GameLogger.Log("czz 0" + funcName);
-                return LuaFramework.LuaManager.instance.CallFunctionArgs<object[]>(funcName);
-            case 1:
-                GameLogger.Log("czz 1" + funcName);
-                return LuaFramework.LuaManager.instance.CallFunctionArgs<object[]>(funcName, args[0]);
-            case 2:
-                GameLogger.Log("czz 2" + funcName);
-                return LuaFramework.LuaManager.instance.CallFunctionArgs<object[]>(funcName, args[0], args[1]);
-            default:
-                throw new NotSupportedException($"不支持 {args.Length} 个参数的调用");
-        }
-        // return LuaFramework.LuaManager.instance.CallFunctionArgs<object[]>(funcName, args);
+        return LuaFramework.LuaManager.instance.CallFunction(funcName, args);
     }
 
     public static void CallFunc(string funcName, GameObject go)

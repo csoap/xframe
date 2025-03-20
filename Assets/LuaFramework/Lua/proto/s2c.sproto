@@ -4,8 +4,6 @@
 }
 
 
-heartbeat 1 {}
-
 login 2 {
 	request {
 		account 0 : string
@@ -15,3 +13,5 @@ login 2 {
 		error_code 0 : integer
 	}
 }
+
+heartbeat 99 {}

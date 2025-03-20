@@ -2682,8 +2682,23 @@ namespace LuaInterface
                 }
                 else
                 {
-                    PushUserObject(L, o);
+                    Type t = o.GetType();
+                    // SpStream
+                    if (t == typeof(SpStream))
+                    {
+                        SpStream sp = (SpStream) o;
+                        LuaDLL.lua_pushlstring(L, sp.Buffer, sp.Length);
+                    }
+                    else
+                    {
+                        PushUserObject(L, o);
+                    }
                 }
+
+                // else
+                // {
+                //     PushUserObject(L, o);
+                // }
             }
         }
 
@@ -2818,6 +2833,18 @@ namespace LuaInterface
                 else if (obj is UnityEngine.TrackedReference)
                 {
                     Push(L, (UnityEngine.TrackedReference)obj);
+                }
+                else if (t == typeof(LuaByteBuffer))
+                {
+                    LuaByteBuffer lbb = (LuaByteBuffer)obj;
+                    //TODO:
+                    //LuaDLL.lua_pushlstring(L, lbb.buffer, lbb.buffer.Length);
+                    LuaDLL.lua_pushlstring(L, lbb.buffer, lbb.Length);
+                }
+                else if (t == typeof(SpStream))
+                {
+                    SpStream sp = (SpStream)obj;
+                    LuaDLL.lua_pushlstring(L, sp.Buffer, sp.Length);
                 }
                 else if (obj is Delegate)
                 {

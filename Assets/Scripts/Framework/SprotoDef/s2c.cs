@@ -8,7 +8,19 @@ public class s2c {
 }
 
 
-heartbeat 1 {}
+login 2 {
+	request {
+		account 0 : string
+		pwd 1 : string
+	}
+	response {
+		error_code 0 : integer
+	}
+}
+
+
+
+heartbeat 99 {}
 
 ";
 }

@@ -17,5 +17,25 @@ sayhello 1 {
 	  msg 1 : string
 	}
 }
+
+login 2 {
+	request {
+		account 0 : string
+		pwd 1 : string
+	}
+	response {
+		error_code 0 : integer
+	}
+}
+
+get 3 {
+	request {
+		what 0 : string
+	}
+	response {
+		result 0 : string
+	}
+}
+
 ";
 }

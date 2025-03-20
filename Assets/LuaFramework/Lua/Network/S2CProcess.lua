@@ -4,7 +4,7 @@
 --服务端下发协议给客户端：Lua层
 s2cProcessTab =
 {
-    -- heartbeat = { 1, HeartMgr.OnHeartBeat },
+     heartbeat = { 1, HeartMgr.OnHeartBeat },
 }
 
 --endregion

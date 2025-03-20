@@ -12,6 +12,17 @@ function log(str)
 
 end
 
+function logCZZ(str)
+    if is_editor then
+        local luaStackStr = debug.traceback(str, 0)
+        Util.Log("czz: " .. luaStackStr)
+    else
+        Util.Log("czz: s" .. tr)
+    end
+
+end
+
+
 function logGreen(str)
     if is_editor then
         local luaStackStr = debug.traceback(str, 0)

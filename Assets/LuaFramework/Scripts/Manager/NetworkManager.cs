@@ -100,7 +100,7 @@ namespace LuaFramework
         public void OnInit()
         {
             // CallMethod("OnInit");
-            LuaCall.CallFunc("OnInit");
+            CallMethod("OnInit");
             
             OnRequestDataFun = Util.GetLuaFunc("Network", "OnRequestDataFun");
 
@@ -128,19 +128,16 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public object[] CallMethod(string func, params object[] args)
         {
-            Debug.Log(ManagerName.Network + "." + func + "_" + args.Length);
-            object[] objects = LuaCall.CallFunc(ManagerName.Network + "." + func, args);
-            // object[] objects = LuaCall.CallFunc(ManagerName.Network + "." + func, args);
-            // object[] objects = LuaFramework.LuaManager.instance.CallFunctionArgs<object[]>(ManagerName.Network + "." + func, args[0]);
-            return objects;
+            return LuaCall.CallFunc(ManagerName.Network + "." + func, args);
         }
 
         ///---------------------------------接入本地的网络处理---------------------------------------------------
         [NoToLuaAttribute]
         public void OnNetStateChanged(NetState state, object param = null)
         {
-            GameLogger.Log(param);
             CallMethod("OnNetStateChanged", (int)state, param);
+            
+            
         }
 
         /// <summary>
@@ -150,6 +147,7 @@ namespace LuaFramework
         /// <param name="protoName">协议名</param>
         public static void OnSendData(int session, string protoName)
         {
+            GameLogger.LogCZZ("OnSenData " +"_" +session +"_"  +protoName);
             m_session2ProtoDic.Add(session, protoName);
         }
 
@@ -170,8 +168,10 @@ namespace LuaFramework
                     if (OnRequestDataFun != null)
                     {
                         //OnRequestDataFun.Call(spStream.Buffer);
-
-                        object[] objs = OnRequestDataFun.Invoke<SpStream, int, object[]>(spStream, spStream.Length);
+                        GameLogger.LogCZZ("OnRequestData");
+                        SprotoUtil.DumpStream(spStream);
+                        // object[] objs = OnRequestDataFun.Invoke<SpStream, int, object[]>(spStream, spStream.Length);
+                        object[] objs = OnRequestDataFun.CallArgs(spStream, spStream.Length);
                         if (objs != null && objs.Length >= 1)
                         {
                             return (bool)objs[0];
@@ -194,10 +194,12 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public static bool OnResponseData(SpStream spStream, SpProtocol protocol, int session)
         {
+            GameLogger.LogCZZ("OnResponseData");
             bool bRet = true;
 
             if (protocol == null)
             {
+                GameLogger.LogCZZ("11111111");
                 // C#部分未处理的协议，传入到lua 处理
                 if (OnResponseDataFun != null)
                 {
@@ -206,9 +208,11 @@ namespace LuaFramework
                     {
                         GameLogger.LogError("NetworkManager OnResponseData protocol is nil session not exist " + session);
                     }
+                    GameLogger.LogCZZ("OnResponseData " + protoName + " session " + session);
 
-                    // object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
-                    object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
+                    // SprotoUtil.DumpStream(spStream);
+                    // object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
+                    object[] objs = OnRequestDataFun.CallArgs(spStream, spStream.Length, protoName);
                     if (objs != null && objs.Length >= 1)
                     {
                         bRet = (bool)objs[0];
@@ -222,20 +226,24 @@ namespace LuaFramework
             }
             else
             {
+                GameLogger.LogCZZ("22222222");
                 int processType = 0;
                 if (m_c2sDic.TryGetValue(protocol.Tag, out processType) && processType > 0)
                 {
                     bRet = processType <= 1;
                     if (OnResponseDataFun != null)
                     {
+                        GameLogger.LogCZZ("33333333");
                         string protoName = null;
                         if (!m_session2ProtoDic.TryGetValue(session, out protoName))
                         {
                             GameLogger.LogError("NetworkManager OnResponseData session not exist " + session + " tag = " + protocol.Tag);
                         }
 
-                        // object[] objs = OnResponseDataFun.CallResult(spStream, spStream.Length, protoName);
-                        object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
+                        GameLogger.LogCZZ("OnResponseData " + protoName + " session " + session);
+                        // SprotoUtil.DumpStream(spStream);
+                        object[] objs = OnResponseDataFun.CallArgs(spStream, spStream.Length, protoName);
+                        // object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
                         if (objs != null && objs.Length >= 1)
                         {
                             bRet = (bool)objs[0];

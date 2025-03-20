@@ -96,6 +96,7 @@ public class ProtocolProcessor
             for (int i = 0, cnt = tcbs.Count; i < cnt; ++i)
             {
                 var cb = tcbs[i];
+                GameLogger.Log("invokeCallback" + protocolName);
                 if (null != cb) cb(protocolName, arg);
             }
 
