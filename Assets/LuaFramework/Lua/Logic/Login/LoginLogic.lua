@@ -12,7 +12,7 @@ function LoginLogic.DoLogin(account, pwdMd5, cb)
     end
 
     -- TODO 调用SDK或与游戏服务端通信，执行登录流程
-    log("DoLogin, account: " .. account .. ", pwdMd5: " .. pwdMd5)
+    --log("DoLogin, account: " .. account .. ", pwdMd5: " .. pwdMd5)
     -- 缓存账号密码
     Cache.Set('ACCOUNT', account)
     Cache.Set('PASSWORD', pwdMd5)
@@ -40,6 +40,7 @@ end
 -- 执行登出
 function LoginLogic.DoLogout()
     -- TODO 调用SDK登出接口
+    Network.DisConnect()
     log("DoLogout")
     -- 显示登录界面
     LoginPanel.Show()

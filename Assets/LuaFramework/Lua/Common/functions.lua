@@ -17,7 +17,7 @@ function logCZZ(str)
         local luaStackStr = debug.traceback(str, 0)
         Util.Log("czz: " .. luaStackStr)
     else
-        Util.Log("czz: s" .. tr)
+        Util.Log("czz: s" .. str)
     end
 
 end

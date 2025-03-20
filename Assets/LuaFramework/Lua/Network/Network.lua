@@ -127,10 +127,16 @@ function Network.OnInit()
 end
 
 function Network.Connect(host, ip, connectCb)
+    log("Network.Connect" .. host .. ", ip: " .. ip)
     this.connectCb = nil
     this.connectCb = connectCb
     WaitBoard.Create()
     ClientNet:Connect(host, ip, false)
+end
+
+function Network.DisConnect()
+    this.connectCb = nil
+    ClientNet:Disconnect()
 end
 
 -- 网络状态改变

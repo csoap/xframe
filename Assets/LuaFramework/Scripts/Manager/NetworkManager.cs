@@ -194,12 +194,11 @@ namespace LuaFramework
         [NoToLuaAttribute]
         public static bool OnResponseData(SpStream spStream, SpProtocol protocol, int session)
         {
-            GameLogger.LogCZZ("OnResponseData");
+            // GameLogger.LogCZZ("OnResponseData");
             bool bRet = true;
 
             if (protocol == null)
             {
-                GameLogger.LogCZZ("11111111");
                 // C#部分未处理的协议，传入到lua 处理
                 if (OnResponseDataFun != null)
                 {
@@ -226,14 +225,12 @@ namespace LuaFramework
             }
             else
             {
-                GameLogger.LogCZZ("22222222");
                 int processType = 0;
                 if (m_c2sDic.TryGetValue(protocol.Tag, out processType) && processType > 0)
                 {
                     bRet = processType <= 1;
                     if (OnResponseDataFun != null)
                     {
-                        GameLogger.LogCZZ("33333333");
                         string protoName = null;
                         if (!m_session2ProtoDic.TryGetValue(session, out protoName))
                         {
@@ -242,8 +239,8 @@ namespace LuaFramework
 
                         GameLogger.LogCZZ("OnResponseData " + protoName + " session " + session);
                         // SprotoUtil.DumpStream(spStream);
-                        object[] objs = OnResponseDataFun.CallArgs(spStream, spStream.Length, protoName);
                         // object[] objs = OnResponseDataFun.Invoke<SpStream, int, string, object[]>(spStream, spStream.Length, protoName);
+                        object[] objs = OnResponseDataFun.CallArgs(spStream, spStream.Length, protoName);
                         if (objs != null && objs.Length >= 1)
                         {
                             bRet = (bool)objs[0];

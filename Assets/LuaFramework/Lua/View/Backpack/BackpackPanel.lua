@@ -38,7 +38,7 @@ function BackpackPanel:CreatePropList(data)
         for _, dataItem in pairs(data) do
             if LuaUtil.IsNilOrNull(self.panelObj) then return end
             local item = LuaUtil.CloneObj(self.propItem)
-            coroutine.wait(0.005)
+            --coroutine.wait(0.005)
         end
     end)
 end

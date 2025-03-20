@@ -367,27 +367,6 @@ namespace LuaInterface
             EndPCall();
             return ret1;
         }
-
-        //慎用, 有gc alloc
-        [System.Obsolete("LuaFunction.LazyCall() is obsolete.Use LuaFunction.Invoke()")]
-        // public object[] LazyCall(params object[] args)
-        // {
-        //     BeginPCall();
-        //     int count = args == null ? 0 : args.Length;
-        //
-        //     if (!luaState.LuaCheckStack(count + 6))
-        //     {
-        //         EndPCall();
-        //         throw new LuaException("stack overflow");
-        //     }
-        //     
-        //     PushArgs(args);
-        //     PCall();
-        //     object[] objs = luaState.CheckObjects(oldTop);
-        //     EndPCall();
-        //     return objs;
-        // }
-
         
         //慎用
         public object[] CallArgs(params object[] args)
@@ -408,7 +387,29 @@ namespace LuaInterface
             object[] objs = luaState.CheckObjects(oldTop);
             EndPCall();
             return objs;
+            
         }
+        
+        //慎用, 有gc alloc
+        [System.Obsolete("LuaFunction.LazyCall() is obsolete.Use LuaFunction.Invoke()")]
+        // public object[] LazyCall(params object[] args)
+        // {
+        //     BeginPCall();
+        //     int count = args == null ? 0 : args.Length;
+        //
+        //     if (!luaState.LuaCheckStack(count + 6))
+        //     {
+        //         EndPCall();
+        //         throw new LuaException("stack overflow");
+        //     }
+        //     
+        //     PushArgs(args);
+        //     PCall();
+        //     object[] objs = luaState.CheckObjects(oldTop);
+        //     EndPCall();
+        //     return objs;
+        // }
+
         
         public void CheckStack(int args)
         {
